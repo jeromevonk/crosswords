@@ -134,7 +134,6 @@ export default function Home() {
 
   return (
     <main className="container">
-      <h1 className="title">Palavras Cruzadas</h1>
       <div className="game-layout">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
           <Grid
