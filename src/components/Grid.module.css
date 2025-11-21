@@ -142,3 +142,52 @@
     opacity: 0.6;
     pointer-events: none;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .cell {
+        font-size: 1rem;
+    }
+
+    .cellNumber {
+        font-size: 0.45rem;
+        top: 0px;
+        left: 1px;
+    }
+
+    .headerCell,
+    .rowHeader {
+        font-size: 0.65rem;
+    }
+
+    .gridWrapper {
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    }
+}
+
+@media (max-width: 480px) {
+
+    .columnHeaders,
+    .rowHeader {
+        display: none;
+    }
+
+    .gridWithRows {
+        padding: 2px;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 400px) {
+    .cell {
+        font-size: 0.85rem;
+    }
+
+    .cellNumber {
+        font-size: 0.4rem;
+    }
+
+    .gridWrapper {
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+    }
+}

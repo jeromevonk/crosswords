@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { track } from '@vercel/analytics';
 import { Grid } from "@/components/Grid";
 import { ClueList } from "@/components/ClueList";
 import { GridData, Direction, ClueGroup, Word, PuzzleData } from '@/lib/types';
@@ -51,8 +50,10 @@ export default function Home() {
           setActiveWord({ row: firstWord.row, col: firstWord.col, direction: 'across' });
         }
 
-        // Track puzzle start
-        track('puzzle_started', { puzzleId });
+        // Track puzzle start with GA4
+        if (typeof window !== 'undefined' && (window as any).gtag) {
+          (window as any).gtag('event', 'puzzle_started', { puzzleId });
+        }
       });
   }, [puzzleId]);
 
@@ -61,7 +62,9 @@ export default function Home() {
     const handleBeforeUnload = () => {
       const completion = calculateCompletion(grid);
       const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
-      track('puzzle_progress', { puzzleId, completion, timeSpent });
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'puzzle_progress', { puzzleId, completion, timeSpent });
+      }
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -176,7 +179,9 @@ export default function Home() {
 
     if (isCompleted) {
       const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
-      track('puzzle_completed', { puzzleId, timeSpent });
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'puzzle_completed', { puzzleId, timeSpent });
+      }
     }
   };
 
@@ -197,6 +202,7 @@ export default function Home() {
           />
           <button
             onClick={checkGrid}
+            className="verify-button"
             style={{
               padding: '0.8rem 2rem',
               fontSize: '1rem',

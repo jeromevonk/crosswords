@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styles from './ClueList.module.css';
 import { ClueGroup, Direction, Word } from '@/lib/types';
 
@@ -15,6 +15,7 @@ interface ClueListProps {
 
 export const ClueList: React.FC<ClueListProps> = ({ clues, activeWord, onClueClick }) => {
     const activeClueRef = useRef<HTMLDivElement>(null);
+    const [activeTab, setActiveTab] = useState<Direction>('across');
 
     useEffect(() => {
         if (activeClueRef.current) {
@@ -24,6 +25,13 @@ export const ClueList: React.FC<ClueListProps> = ({ clues, activeWord, onClueCli
             });
         }
     }, [activeWord]);
+
+    // Sync active tab with active word direction
+    useEffect(() => {
+        if (activeWord?.direction) {
+            setActiveTab(activeWord.direction);
+        }
+    }, [activeWord?.direction]);
 
     const renderClueGroup = (clueGroup: ClueGroup, direction: Direction) => {
         return (
@@ -51,16 +59,45 @@ export const ClueList: React.FC<ClueListProps> = ({ clues, activeWord, onClueCli
 
     return (
         <div className={styles.clueListContainer}>
-            <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>Horizontais</h3>
-                <div className={styles.list}>
-                    {clues.across.map(group => renderClueGroup(group, 'across'))}
+            {/* Mobile Tabs */}
+            <div className={styles.tabContainer}>
+                <button
+                    className={`${styles.tab} ${activeTab === 'across' ? styles.tabActive : ''}`}
+                    onClick={() => setActiveTab('across')}
+                >
+                    Horizontais
+                </button>
+                <button
+                    className={`${styles.tab} ${activeTab === 'down' ? styles.tabActive : ''}`}
+                    onClick={() => setActiveTab('down')}
+                >
+                    Verticais
+                </button>
+            </div>
+
+            {/* Desktop: Show both sections */}
+            <div className={styles.desktopView}>
+                <div className={styles.section}>
+                    <h3 className={styles.sectionTitle}>Horizontais</h3>
+                    <div className={styles.list}>
+                        {clues.across.map(group => renderClueGroup(group, 'across'))}
+                    </div>
+                </div>
+                <div className={styles.section}>
+                    <h3 className={styles.sectionTitle}>Verticais</h3>
+                    <div className={styles.list}>
+                        {clues.down.map(group => renderClueGroup(group, 'down'))}
+                    </div>
                 </div>
             </div>
-            <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>Verticais</h3>
+
+            {/* Mobile: Show active tab only */}
+            <div className={styles.mobileView}>
                 <div className={styles.list}>
-                    {clues.down.map(group => renderClueGroup(group, 'down'))}
+                    {activeTab === 'across'
+                        ? clues.across.map(group => renderClueGroup(group, 'across'))
+                        : clues.down.map(group => renderClueGroup(group, 'down'))
+                    }
                 </div>
             </div>
         </div>
