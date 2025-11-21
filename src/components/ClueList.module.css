@@ -1,0 +1,95 @@
+.clueListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 400px;
+    max-height: 600px;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    overflow: hidden;
+}
+
+.sectionTitle {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 0.5rem;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Custom Scrollbar */
+.list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.list::-webkit-scrollbar-track {
+    background: var(--color-surface);
+}
+
+.list::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+.clueGroupContainer {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.clueNumber {
+    font-weight: 700;
+    font-size: 1.1rem;
+    min-width: 2rem;
+    color: var(--color-text);
+    padding-top: 0.25rem;
+}
+
+.wordsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.clueItem {
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    border-left: 3px solid transparent;
+}
+
+.clueItem:hover {
+    background-color: var(--color-surface-hover);
+    color: var(--color-text);
+    border-left-color: var(--color-primary);
+}
+
+.clueItemActive {
+    background-color: #FFD93D;
+    color: #000000;
+    font-weight: 600;
+    border-left-color: #FFC107;
+}
+
+.clueText {
+    display: block;
+}

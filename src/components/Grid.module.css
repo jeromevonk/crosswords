@@ -1,0 +1,144 @@
+.gridWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.columnHeaders {
+    display: flex;
+    gap: var(--grid-gap);
+    padding-left: calc(var(--grid-cell-size) + var(--grid-gap));
+    background-color: var(--color-border);
+    padding-top: var(--grid-gap);
+}
+
+.cornerCell {
+    width: var(--grid-cell-size);
+    height: var(--grid-cell-size);
+    display: none;
+}
+
+.headerCell {
+    width: var(--grid-cell-size);
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+    opacity: 0.7;
+}
+
+.rowHeader {
+    width: var(--grid-cell-size);
+    height: var(--grid-cell-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+    opacity: 0.7;
+    background-color: var(--color-border);
+}
+
+.gridWithRows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--grid-gap);
+    background-color: var(--color-border);
+    padding: var(--grid-gap);
+}
+
+.rowContainer {
+    display: flex;
+    gap: var(--grid-gap);
+}
+
+.rowCells {
+    display: flex;
+    gap: var(--grid-gap);
+}
+
+.cell {
+    width: var(--grid-cell-size);
+    height: var(--grid-cell-size);
+    background-color: var(--cell-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--cell-text);
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: background-color 0.1s ease, color 0.1s ease;
+    border-radius: 2px;
+}
+
+.cellBlack {
+    background-color: var(--cell-black);
+    cursor: default;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.cellActive {
+    background-color: var(--cell-active-bg);
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 2px solid #333;
+}
+
+.cellHighlight {
+    background-color: #b8e994;
+    /* Soft green */
+}
+
+.cellError {
+    color: var(--color-error);
+    background-color: #ffcccc;
+    animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+.cellNumber {
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    font-size: 0.55rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--cell-text);
+    opacity: 0.6;
+    pointer-events: none;
+}

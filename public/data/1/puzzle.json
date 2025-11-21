@@ -1,0 +1,529 @@
+{
+  "id": "1",
+  "from": "Palavras Cruzadas #338 a recreativa",
+  "rows": 13,
+  "cols": 13,
+  "grid": [
+    "SECA#RIM#CASE",
+    "ICOR#AMA#OVAL",
+    "CONTUSAO#RAIZ",
+    "##HORA#ZUEIRA",
+    "TRELA#MINI###",
+    "RICA#MANDARIM",
+    "EME#BANHA#EVA",
+    "SARDINHA#AMAR",
+    "###ARUA#GRANA",
+    "ATENAS#ANIS##",
+    "RAMO#ESQUECER",
+    "APIS#ARU#TALA",
+    "RARO#RAI#EROS"
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "words": [
+          {
+            "text": "Falta de chuvas",
+            "answer": "SECA",
+            "row": 0,
+            "col": 0
+          },
+          {
+            "text": "Um filtro do sangue",
+            "answer": "RIM",
+            "row": 0,
+            "col": 5
+          },
+          {
+            "text": "A atriz Regina, famosa por seus personagens cômicos da televisão",
+            "answer": "CASE",
+            "row": 0,
+            "col": 9
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "words": [
+          {
+            "text": "O sangue que corria nas veias dos deuses",
+            "answer": "ICOR",
+            "row": 1,
+            "col": 0
+          },
+          {
+            "text": "Perdão concedido pelos muçulmanos a quem não pratica o islamismo",
+            "answer": "AMA",
+            "row": 1,
+            "col": 5
+          },
+          {
+            "text": "A forma da bola de rúgbi",
+            "answer": "OVAL",
+            "row": 1,
+            "col": 9
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "words": [
+          {
+            "text": "Lesão produzida pela batida de um corpo duro nos tecidos",
+            "answer": "CONTUSAO",
+            "row": 2,
+            "col": 0
+          },
+          {
+            "text": "Alimenta a planta",
+            "answer": "RAIZ",
+            "row": 2,
+            "col": 9
+          }
+        ]
+      },
+      {
+        "number": 4,
+        "words": [
+          {
+            "text": "Um dado do encontro",
+            "answer": "HORA",
+            "row": 3,
+            "col": 2
+          },
+          {
+            "text": "Confusão, barulheira",
+            "answer": "ZOEIRA",
+            "row": 3,
+            "col": 7
+          }
+        ]
+      },
+      {
+        "number": 5,
+        "words": [
+          {
+            "text": "Dá-a quem aceita galanteios",
+            "answer": "TRELA",
+            "row": 4,
+            "col": 0
+          },
+          {
+            "text": "A saia mais curta",
+            "answer": "MINI",
+            "row": 4,
+            "col": 6
+          }
+        ]
+      },
+      {
+        "number": 6,
+        "words": [
+          {
+            "text": "Cheia da grana",
+            "answer": "RICA",
+            "row": 5,
+            "col": 0
+          },
+          {
+            "text": "Alto funcionário da China imperial",
+            "answer": "MANDARIM",
+            "row": 5,
+            "col": 5
+          }
+        ]
+      },
+      {
+        "number": 7,
+        "words": [
+          {
+            "text": "O fonema que se repete no mecanismo",
+            "answer": "EME",
+            "row": 6,
+            "col": 0
+          },
+          {
+            "text": "Uma parte gorda do porco",
+            "answer": "BANHA",
+            "row": 6,
+            "col": 4
+          },
+          {
+            "text": "A mulher que nasceu em idade de casar",
+            "answer": "EVA",
+            "row": 6,
+            "col": 10
+          }
+        ]
+      },
+      {
+        "number": 8,
+        "words": [
+          {
+            "text": "Um peixe muito comercializado em conserva",
+            "answer": "SARDINHA",
+            "row": 7,
+            "col": 0
+          },
+          {
+            "text": "Ter uma afeição elevada e desinteressada",
+            "answer": "AMAR",
+            "row": 7,
+            "col": 9
+          }
+        ]
+      },
+      {
+        "number": 9,
+        "words": [
+          {
+            "text": "Indivíduo de tribo indígena que habita a ilha de Marajó",
+            "answer": "ARUA",
+            "row": 8,
+            "col": 3
+          },
+          {
+            "text": "(Gír.) Dinheiro",
+            "answer": "GRANA",
+            "row": 8,
+            "col": 8
+          }
+        ]
+      },
+      {
+        "number": 10,
+        "words": [
+          {
+            "text": "A cidade com a Acrópole",
+            "answer": "ATENAS",
+            "row": 9,
+            "col": 0
+          },
+          {
+            "text": "Semente de sabor aromático, de produtos digestivas, calmantes, etc.",
+            "answer": "ANIS",
+            "row": 9,
+            "col": 7
+          }
+        ]
+      },
+      {
+        "number": 11,
+        "words": [
+          {
+            "text": "Corta-o o podador",
+            "answer": "RAMO",
+            "row": 10,
+            "col": 0
+          },
+          {
+            "text": "Não pensar mais em",
+            "answer": "ESQUECER",
+            "row": 10,
+            "col": 5
+          }
+        ]
+      },
+      {
+        "number": 12,
+        "words": [
+          {
+            "text": "O mítico touro negro egípcio",
+            "answer": "APIS",
+            "row": 11,
+            "col": 0
+          },
+          {
+            "text": "Sapo amazônico, sem língua, de corpo achatado",
+            "answer": "ARU",
+            "row": 11,
+            "col": 5
+          },
+          {
+            "text": "Pode tê-la larga o pneu",
+            "answer": "TALA",
+            "row": 11,
+            "col": 9
+          }
+        ]
+      },
+      {
+        "number": 13,
+        "words": [
+          {
+            "text": "Que dificilmente se encontra",
+            "answer": "RARO",
+            "row": 12,
+            "col": 0
+          },
+          {
+            "text": "Sigla da Rádio e televisão Italiana",
+            "answer": "RAI",
+            "row": 12,
+            "col": 5
+          },
+          {
+            "text": "O Cupido dos Gregos",
+            "answer": "EROS",
+            "row": 12,
+            "col": 9
+          }
+        ]
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "words": [
+          {
+            "text": "(Lat.) Assim mesmo",
+            "answer": "SIC",
+            "row": 0,
+            "col": 0
+          },
+          {
+            "text": "O menor número de lados de um polígono",
+            "answer": "TRES",
+            "row": 4,
+            "col": 0
+          },
+          {
+            "text": "Sulcar (águas ou terras)",
+            "answer": "ARAR",
+            "row": 9,
+            "col": 0
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "words": [
+          {
+            "text": "Repetição de um som devido à reflexão das ondas sonoras",
+            "answer": "ECO",
+            "row": 0,
+            "col": 1
+          },
+          {
+            "text": "Procuram-na os poetas",
+            "answer": "RIMA",
+            "row": 4,
+            "col": 1
+          },
+          {
+            "text": "Dá-se com a palma da mão",
+            "answer": "TAPA",
+            "row": 9,
+            "col": 1
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "words": [
+          {
+            "text": "Saber quem é",
+            "answer": "CONHECER",
+            "row": 0,
+            "col": 2
+          },
+          {
+            "text": "Um mandachuva das Arábias",
+            "answer": "EMIR",
+            "row": 9,
+            "col": 2
+          }
+        ]
+      },
+      {
+        "number": 4,
+        "words": [
+          {
+            "text": "Espécie de maca",
+            "answer": "ARTOLA",
+            "row": 0,
+            "col": 3
+          },
+          {
+            "text": "Prejudicial, maléfico",
+            "answer": "DANOSO",
+            "row": 7,
+            "col": 3
+          }
+        ]
+      },
+      {
+        "number": 5,
+        "words": [
+          {
+            "text": "Larva de mosca",
+            "answer": "URA",
+            "row": 2,
+            "col": 4
+          },
+          {
+            "text": "Buraco feito pelos meninos para o jogo do pião",
+            "answer": "BIRA",
+            "row": 6,
+            "col": 4
+          }
+        ]
+      },
+      {
+        "number": 6,
+        "words": [
+          {
+            "text": "Pouco funda",
+            "answer": "RASA",
+            "row": 0,
+            "col": 5
+          },
+          {
+            "text": "Pegar com as mãos",
+            "answer": "MANUSEAR",
+            "row": 5,
+            "col": 5
+          }
+        ]
+      },
+      {
+        "number": 7,
+        "words": [
+          {
+            "text": "Atrai o ferro",
+            "answer": "IMA",
+            "row": 0,
+            "col": 6
+          },
+          {
+            "text": "Começa ao nascer do sol",
+            "answer": "MANHA",
+            "row": 4,
+            "col": 6
+          },
+          {
+            "text": "Abrev.: senhora",
+            "answer": "SRA",
+            "row": 10,
+            "col": 6
+          }
+        ]
+      },
+      {
+        "number": 8,
+        "words": [
+          {
+            "text": "Haste terminada em garra, para pegar as costas",
+            "answer": "MAOZINHA",
+            "row": 0,
+            "col": 7
+          },
+          {
+            "text": "Neste ponto exato",
+            "answer": "AQUI",
+            "row": 9,
+            "col": 7
+          }
+        ]
+      },
+      {
+        "number": 9,
+        "words": [
+          {
+            "text": "Tem a crista de espuma",
+            "answer": "ONDA",
+            "row": 3,
+            "col": 8
+          },
+          {
+            "text": "O maior dos antílopes",
+            "answer": "GNU",
+            "row": 8,
+            "col": 8
+          }
+        ]
+      },
+      {
+        "number": 10,
+        "words": [
+          {
+            "text": "Península asiática dividida em dois países diferentes pelo paralelo 38",
+            "answer": "COREIA",
+            "row": 0,
+            "col": 9
+          },
+          {
+            "text": "Antiga máquina de guerra para abater muralhas",
+            "answer": "ARIETE",
+            "row": 7,
+            "col": 9
+          }
+        ]
+      },
+      {
+        "number": 11,
+        "words": [
+          {
+            "text": "Cidade do estado de São Paulo, próxima a Bauru",
+            "answer": "AVAI",
+            "row": 0,
+            "col": 10
+          },
+          {
+            "text": "Considerar novamente, repor",
+            "answer": "REMASCAR",
+            "row": 5,
+            "col": 10
+          }
+        ]
+      },
+      {
+        "number": 12,
+        "words": [
+          {
+            "text": "Mover-se de dentro para fora",
+            "answer": "SAIR",
+            "row": 0,
+            "col": 11
+          },
+          {
+            "text": "Nome de czares e príncipes russos",
+            "answer": "IVAN",
+            "row": 5,
+            "col": 11
+          },
+          {
+            "text": "Cada um dos anéis de uma cadeia",
+            "answer": "ELO",
+            "row": 10,
+            "col": 11
+          }
+        ]
+      },
+      {
+        "number": 13,
+        "words": [
+          {
+            "text": "A cantora Soares de \"Na Roda da Samba\"",
+            "answer": "ELZA",
+            "row": 0,
+            "col": 12
+          },
+          {
+            "text": "Nome que a bíblico e melancólica Noemi escolheu, pela morte do marido",
+            "answer": "MARA",
+            "row": 5,
+            "col": 12
+          },
+          {
+            "text": "Título de chefe e governador abexim",
+            "answer": "RAS",
+            "row": 10,
+            "col": 12
+          }
+        ]
+      }
+    ]
+  }
+}
