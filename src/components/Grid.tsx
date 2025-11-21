@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import styles from './Grid.module.css';
 import { GridData, Direction } from '@/lib/types';
 
@@ -25,6 +25,14 @@ export const Grid: React.FC<GridProps> = ({
     onMoveCursor,
     onDirectionChange
 }) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    // Focus input when cell is clicked (triggers mobile keyboard)
+    useEffect(() => {
+        if (activeCell && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [activeCell]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         if (!activeCell || grid.length === 0) return;
@@ -69,8 +77,65 @@ export const Grid: React.FC<GridProps> = ({
 
     const numCols = grid[0]?.length || 0;
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!activeCell || grid.length === 0) return;
+        const { r, c } = activeCell;
+        const value = e.target.value.toUpperCase();
+
+        if (value && /^[A-Z]$/.test(value)) {
+            const newGrid = [...grid];
+            newGrid[r][c].value = value;
+            onGridChange(newGrid);
+            onMoveCursor(r, c, direction, true);
+            // Clear input for next character
+            if (inputRef.current) {
+                inputRef.current.value = '';
+            }
+        }
+    };
+
+    const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (!activeCell || grid.length === 0) return;
+        const { r, c } = activeCell;
+
+        if (e.key === 'Backspace') {
+            e.preventDefault();
+            const newGrid = [...grid];
+            if (newGrid[r][c].value !== '') {
+                newGrid[r][c].value = '';
+                onGridChange(newGrid);
+            } else {
+                onMoveCursor(r, c, direction, false);
+            }
+            if (inputRef.current) {
+                inputRef.current.value = '';
+            }
+        }
+    };
+
     return (
         <div className={styles.gridWrapper}>
+            {/* Hidden input for mobile keyboard */}
+            <input
+                ref={inputRef}
+                type="text"
+                inputMode="text"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="characters"
+                maxLength={1}
+                onChange={handleInputChange}
+                onKeyDown={handleInputKeyDown}
+                style={{
+                    position: 'absolute',
+                    left: '-9999px',
+                    width: '1px',
+                    height: '1px',
+                    opacity: 0,
+                }}
+                aria-hidden="true"
+            />
+
             {/* Column headers */}
             <div className={styles.columnHeaders}>
                 <div className={styles.cornerCell}></div>
