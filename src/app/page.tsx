@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { track } from '@vercel/analytics';
 import { Grid } from "@/components/Grid";
 import { ClueList } from "@/components/ClueList";
 import { GridData, Direction, ClueGroup, Word, PuzzleData } from '@/lib/types';
@@ -12,6 +13,28 @@ export default function Home() {
   const [direction, setDirection] = useState<Direction>('across');
   const [clues, setClues] = useState<{ across: ClueGroup[]; down: ClueGroup[] }>({ across: [], down: [] });
   const [activeWord, setActiveWord] = useState<{ row: number; col: number; direction: Direction } | null>(null);
+
+  // Analytics tracking
+  const [puzzleId] = useState<string>('1');
+  const startTimeRef = useRef<number>(Date.now());
+
+  // Helper function to calculate completion percentage
+  const calculateCompletion = useCallback((gridData: GridData) => {
+    if (gridData.length === 0) return 0;
+    let totalCells = 0;
+    let filledCells = 0;
+
+    gridData.forEach(row => {
+      row.forEach(cell => {
+        if (!cell.isBlack) {
+          totalCells++;
+          if (cell.value !== '') filledCells++;
+        }
+      });
+    });
+
+    return totalCells > 0 ? Math.round((filledCells / totalCells) * 100) : 0;
+  }, []);
 
   useEffect(() => {
     // Load puzzle #1 from its folder
@@ -27,8 +50,23 @@ export default function Home() {
           setActiveCell({ r: firstWord.row, c: firstWord.col });
           setActiveWord({ row: firstWord.row, col: firstWord.col, direction: 'across' });
         }
+
+        // Track puzzle start
+        track('puzzle_started', { puzzleId });
       });
-  }, []);
+  }, [puzzleId]);
+
+  // Track progress when user leaves
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const completion = calculateCompletion(grid);
+      const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
+      track('puzzle_progress', { puzzleId, completion, timeSpent });
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [grid, puzzleId, calculateCompletion]);
 
   const handleCellClick = (r: number, c: number) => {
     if (activeCell?.r === r && activeCell?.c === c) {
@@ -130,10 +168,21 @@ export default function Home() {
       }))
     );
     setGrid(newGrid);
+
+    // Check if puzzle is completed (all cells correct)
+    const isCompleted = newGrid.every(row =>
+      row.every(cell => cell.isBlack || cell.value === cell.answer)
+    );
+
+    if (isCompleted) {
+      const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
+      track('puzzle_completed', { puzzleId, timeSpent });
+    }
   };
 
   return (
     <main className="container">
+      <h1 className="title">Cruzadas</h1>
       <div className="game-layout">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
           <Grid
