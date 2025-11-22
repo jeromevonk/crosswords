@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cruzadas
+
+A modern, responsive crossword puzzle game built with Next.js and TypeScript.
+
+Play at: [https://cruzadas-palavras.vercel.app/](https://cruzadas-palavras.vercel.app/)
+
+![Cruzadas Preview](/icon.png)
+
+## Features
+
+- **Interactive Grid**: Smooth navigation with keyboard support (Arrow keys, Backspace).
+- **Responsive Design**: Optimized for both Desktop and Mobile devices.
+- **Smart Input**: 
+  - Highlights the active word and corresponding clue.
+  - Mobile-friendly hidden input for native keyboard integration.
+  - Debounced input handling for reliable typing.
+- **Verification**: Instant feedback on puzzle completion.
+- **PWA Ready**: Includes proper icons and metadata for home screen installation.
+
+## Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: CSS Modules for scoped, performant styling.
+- **Deployment**: Optimized for Vercel.
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/jeromevonk/crosswords.git
+   cd crosswords
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. **Open the game:**
+   Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+- `src/app`: Next.js App Router pages and layouts.
+- `src/components`: Reusable React components (Grid, ClueList, etc.).
+- `src/lib`: Utility functions and type definitions.
+- `public/data`: Puzzle JSON data files.
 
-To learn more about Next.js, take a look at the following resources:
+## How to Play
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Select a Cell**: Click on any white square in the grid.
+2. **Read the Clue**: The active clue will be highlighted in the list (and vice-versa).
+3. **Type Your Answer**: Use your keyboard to fill in the word.
+   - **Arrow Keys**: Move cursor.
+   - **Space/Click**: Toggle direction (Across/Down).
+   - **Backspace**: Delete character and move back.
+4. **Verify**: Click the "Verificar" button to check your answers.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Adding New Puzzles
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Puzzles are stored in `public/data/{id}/puzzle.json`. To add a new puzzle:
+1. Create a new folder in `public/data/`.
+2. Add a `puzzle.json` file following the existing schema (Grid size, Clues, Answers).
