@@ -26,6 +26,7 @@ export const Grid: React.FC<GridProps> = ({
     onDirectionChange
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
+    const lastProcessedTime = useRef<number>(0);
 
     // Focus input when cell is clicked (triggers mobile keyboard)
     useEffect(() => {
@@ -35,13 +36,17 @@ export const Grid: React.FC<GridProps> = ({
     }, [activeCell]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
-        // If the hidden input is focused, let it handle the input (prevents double keystrokes)
-        if (document.activeElement === inputRef.current) return;
-
         if (!activeCell || grid.length === 0) return;
 
         const { r, c } = activeCell;
         const key = e.key;
+
+        // If hidden input is focused, let it handle letters/backspace to avoid double processing
+        // but still allow arrow keys for navigation
+        const isInputFocused = document.activeElement === inputRef.current;
+        if (isInputFocused && (key === 'Backspace' || /^[a-zA-Z]$/.test(key))) {
+            return;
+        }
 
         if (key === 'ArrowRight') {
             if (direction === 'down') onDirectionChange('across');
@@ -56,6 +61,11 @@ export const Grid: React.FC<GridProps> = ({
             if (direction === 'across') onDirectionChange('down');
             else onMoveCursor(r, c, 'down', false);
         } else if (key === 'Backspace') {
+            // Debounce check
+            const now = Date.now();
+            if (now - lastProcessedTime.current < 50) return;
+            lastProcessedTime.current = now;
+
             const newGrid = [...grid];
             if (newGrid[r][c].value !== '') {
                 newGrid[r][c].value = '';
@@ -64,6 +74,11 @@ export const Grid: React.FC<GridProps> = ({
                 onMoveCursor(r, c, direction, false);
             }
         } else if (/^[a-zA-Z]$/.test(key)) {
+            // Debounce check
+            const now = Date.now();
+            if (now - lastProcessedTime.current < 50) return;
+            lastProcessedTime.current = now;
+
             const newGrid = [...grid];
             newGrid[r][c].value = key.toUpperCase();
             onGridChange(newGrid);
@@ -81,7 +96,32 @@ export const Grid: React.FC<GridProps> = ({
     const numCols = grid[0]?.length || 0;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // Clear the input immediately to prevent showing typed character
+        if (!activeCell || grid.length === 0) {
+            // Always keep input clear
+            if (inputRef.current) inputRef.current.value = '';
+            return;
+        }
+
+        const { r, c } = activeCell;
+        const value = e.target.value;
+
+        // Process letter input from onChange (reliable on all devices)
+        if (value && /^[a-zA-Z]$/.test(value)) {
+            // Debounce check
+            const now = Date.now();
+            if (now - lastProcessedTime.current < 50) {
+                if (inputRef.current) inputRef.current.value = '';
+                return;
+            }
+            lastProcessedTime.current = now;
+
+            const newGrid = [...grid];
+            newGrid[r][c].value = value.toUpperCase();
+            onGridChange(newGrid);
+            onMoveCursor(r, c, direction, true);
+        }
+
+        // Always clear the input
         if (inputRef.current) {
             inputRef.current.value = '';
         }
@@ -91,17 +131,15 @@ export const Grid: React.FC<GridProps> = ({
         if (!activeCell || grid.length === 0) return;
         const { r, c } = activeCell;
 
-        // Handle letter input
-        if (/^[a-zA-Z]$/.test(e.key)) {
-            e.preventDefault();
-            const newGrid = [...grid];
-            newGrid[r][c].value = e.key.toUpperCase();
-            onGridChange(newGrid);
-            onMoveCursor(r, c, direction, true);
-        }
-        // Handle backspace
-        else if (e.key === 'Backspace') {
-            e.preventDefault();
+        // Handle backspace explicitly as onChange doesn't fire for it on empty input
+        if (e.key === 'Backspace') {
+            e.preventDefault(); // Prevent default to avoid any browser back navigation or weirdness
+
+            // Debounce check
+            const now = Date.now();
+            if (now - lastProcessedTime.current < 50) return;
+            lastProcessedTime.current = now;
+
             const newGrid = [...grid];
             if (newGrid[r][c].value !== '') {
                 newGrid[r][c].value = '';
@@ -110,6 +148,8 @@ export const Grid: React.FC<GridProps> = ({
                 onMoveCursor(r, c, direction, false);
             }
         }
+        // Note: We do NOT handle letters here. We let them pass through to onChange.
+        // This ensures compatibility with Android where keydown might not have the correct key.
     };
 
     return (
