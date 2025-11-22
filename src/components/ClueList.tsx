@@ -18,7 +18,10 @@ export const ClueList: React.FC<ClueListProps> = ({ clues, activeWord, onClueCli
     const [activeTab, setActiveTab] = useState<Direction>('across');
 
     useEffect(() => {
-        if (activeClueRef.current) {
+        // Skip auto-scroll on mobile to prevent keyboard focus issues
+        const isMobile = window.innerWidth < 768;
+
+        if (activeClueRef.current && !isMobile) {
             activeClueRef.current.scrollIntoView({
                 behavior: 'smooth',
                 block: 'nearest',
