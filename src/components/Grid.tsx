@@ -35,8 +35,8 @@ export const Grid: React.FC<GridProps> = ({
     }, [activeCell]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
-        // Ignore events from the hidden input (mobile keyboard)
-        if (e.target === inputRef.current) return;
+        // If the hidden input is focused, let it handle the input (prevents double keystrokes)
+        if (document.activeElement === inputRef.current) return;
 
         if (!activeCell || grid.length === 0) return;
 
@@ -81,19 +81,9 @@ export const Grid: React.FC<GridProps> = ({
     const numCols = grid[0]?.length || 0;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!activeCell || grid.length === 0) return;
-        const { r, c } = activeCell;
-        const value = e.target.value.toUpperCase();
-
-        if (value && /^[A-Z]$/.test(value)) {
-            const newGrid = [...grid];
-            newGrid[r][c].value = value;
-            onGridChange(newGrid);
-            onMoveCursor(r, c, direction, true);
-            // Clear input for next character
-            if (inputRef.current) {
-                inputRef.current.value = '';
-            }
+        // Clear the input immediately to prevent showing typed character
+        if (inputRef.current) {
+            inputRef.current.value = '';
         }
     };
 
@@ -101,7 +91,16 @@ export const Grid: React.FC<GridProps> = ({
         if (!activeCell || grid.length === 0) return;
         const { r, c } = activeCell;
 
-        if (e.key === 'Backspace') {
+        // Handle letter input
+        if (/^[a-zA-Z]$/.test(e.key)) {
+            e.preventDefault();
+            const newGrid = [...grid];
+            newGrid[r][c].value = e.key.toUpperCase();
+            onGridChange(newGrid);
+            onMoveCursor(r, c, direction, true);
+        }
+        // Handle backspace
+        else if (e.key === 'Backspace') {
             e.preventDefault();
             const newGrid = [...grid];
             if (newGrid[r][c].value !== '') {
@@ -109,9 +108,6 @@ export const Grid: React.FC<GridProps> = ({
                 onGridChange(newGrid);
             } else {
                 onMoveCursor(r, c, direction, false);
-            }
-            if (inputRef.current) {
-                inputRef.current.value = '';
             }
         }
     };
