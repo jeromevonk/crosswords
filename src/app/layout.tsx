@@ -17,7 +17,10 @@ export const metadata: Metadata = {
   title: "Cruzadas",
   description: "Palavras cruzadas",
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/icon-512.png',
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
