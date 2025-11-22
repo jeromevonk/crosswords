@@ -35,6 +35,9 @@ export const Grid: React.FC<GridProps> = ({
     }, [activeCell]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
+        // Ignore events from the hidden input (mobile keyboard)
+        if (e.target === inputRef.current) return;
+
         if (!activeCell || grid.length === 0) return;
 
         const { r, c } = activeCell;
