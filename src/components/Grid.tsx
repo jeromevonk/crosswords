@@ -109,7 +109,7 @@ export const Grid: React.FC<GridProps> = ({
                 }
             }
         }
-    }, [activeCell, direction, grid, onDirectionChange, onGridChange, onMoveCursor]);
+    }, [activeCell, direction, grid, activeWord, onDirectionChange, onGridChange, onMoveCursor]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
