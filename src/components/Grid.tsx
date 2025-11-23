@@ -84,26 +84,28 @@ export const Grid: React.FC<GridProps> = ({
             onGridChange(newGrid);
             onMoveCursor(r, c, direction, true);
 
-            // Check if we reached the end of the word
-            if (activeWord) {
-                let isLastCell = false;
+            // Check if the word is now complete (all cells filled)
+            if (activeWord && window.innerWidth < 768) {
+                let isWordComplete = true;
                 if (activeWord.direction === 'across') {
-                    const wordEndCol = activeWord.col + activeWord.answer.length - 1;
-                    if (r === activeWord.row && c === wordEndCol) {
-                        isLastCell = true;
+                    for (let col = activeWord.col; col < activeWord.col + activeWord.answer.length; col++) {
+                        if (newGrid[activeWord.row][col].value === '') {
+                            isWordComplete = false;
+                            break;
+                        }
                     }
                 } else {
-                    const wordEndRow = activeWord.row + activeWord.answer.length - 1;
-                    if (c === activeWord.col && r === wordEndRow) {
-                        isLastCell = true;
+                    for (let row = activeWord.row; row < activeWord.row + activeWord.answer.length; row++) {
+                        if (newGrid[row][activeWord.col].value === '') {
+                            isWordComplete = false;
+                            break;
+                        }
                     }
                 }
 
-                // If it's the last cell, hide keyboard on mobile
-                if (isLastCell && window.innerWidth < 768) {
-                    if (inputRef.current) {
-                        inputRef.current.blur();
-                    }
+                // If the word is complete, hide keyboard on mobile
+                if (isWordComplete && inputRef.current) {
+                    inputRef.current.blur();
                 }
             }
         }
@@ -143,26 +145,28 @@ export const Grid: React.FC<GridProps> = ({
             onGridChange(newGrid);
             onMoveCursor(r, c, direction, true);
 
-            // Check if we reached the end of the word
-            if (activeWord) {
-                let isLastCell = false;
+            // Check if the word is now complete (all cells filled)
+            if (activeWord && window.innerWidth < 768) {
+                let isWordComplete = true;
                 if (activeWord.direction === 'across') {
-                    const wordEndCol = activeWord.col + activeWord.answer.length - 1;
-                    if (r === activeWord.row && c === wordEndCol) {
-                        isLastCell = true;
+                    for (let col = activeWord.col; col < activeWord.col + activeWord.answer.length; col++) {
+                        if (newGrid[activeWord.row][col].value === '') {
+                            isWordComplete = false;
+                            break;
+                        }
                     }
                 } else {
-                    const wordEndRow = activeWord.row + activeWord.answer.length - 1;
-                    if (c === activeWord.col && r === wordEndRow) {
-                        isLastCell = true;
+                    for (let row = activeWord.row; row < activeWord.row + activeWord.answer.length; row++) {
+                        if (newGrid[row][activeWord.col].value === '') {
+                            isWordComplete = false;
+                            break;
+                        }
                     }
                 }
 
-                // If it's the last cell, hide keyboard on mobile
-                if (isLastCell && window.innerWidth < 768) {
-                    if (inputRef.current) {
-                        inputRef.current.blur();
-                    }
+                // If the word is complete, hide keyboard on mobile
+                if (isWordComplete && inputRef.current) {
+                    inputRef.current.blur();
                 }
             }
         }
