@@ -82,12 +82,12 @@ export const Grid: React.FC<GridProps> = ({
             const newGrid = [...grid];
             newGrid[r][c].value = key.toUpperCase();
             onGridChange(newGrid);
-            onMoveCursor(r, c, direction, true);
 
             // Check if the word is now complete (all cells filled)
+            let isWordComplete = false;
             if (activeWord && window.innerWidth < 768) {
-                let isWordComplete = true;
                 if (activeWord.direction === 'across') {
+                    isWordComplete = true;
                     for (let col = activeWord.col; col < activeWord.col + activeWord.answer.length; col++) {
                         if (newGrid[activeWord.row][col].value === '') {
                             isWordComplete = false;
@@ -95,6 +95,7 @@ export const Grid: React.FC<GridProps> = ({
                         }
                     }
                 } else {
+                    isWordComplete = true;
                     for (let row = activeWord.row; row < activeWord.row + activeWord.answer.length; row++) {
                         if (newGrid[row][activeWord.col].value === '') {
                             isWordComplete = false;
@@ -102,11 +103,16 @@ export const Grid: React.FC<GridProps> = ({
                         }
                     }
                 }
+            }
 
-                // If the word is complete, hide keyboard on mobile
-                if (isWordComplete && inputRef.current) {
+            // On mobile, if word is complete, hide keyboard and don't move cursor
+            // Otherwise, move cursor normally
+            if (isWordComplete && window.innerWidth < 768) {
+                if (inputRef.current) {
                     inputRef.current.blur();
                 }
+            } else {
+                onMoveCursor(r, c, direction, true);
             }
         }
     }, [activeCell, direction, grid, activeWord, onDirectionChange, onGridChange, onMoveCursor]);
@@ -143,12 +149,12 @@ export const Grid: React.FC<GridProps> = ({
             const newGrid = [...grid];
             newGrid[r][c].value = value.toUpperCase();
             onGridChange(newGrid);
-            onMoveCursor(r, c, direction, true);
 
             // Check if the word is now complete (all cells filled)
+            let isWordComplete = false;
             if (activeWord && window.innerWidth < 768) {
-                let isWordComplete = true;
                 if (activeWord.direction === 'across') {
+                    isWordComplete = true;
                     for (let col = activeWord.col; col < activeWord.col + activeWord.answer.length; col++) {
                         if (newGrid[activeWord.row][col].value === '') {
                             isWordComplete = false;
@@ -156,6 +162,7 @@ export const Grid: React.FC<GridProps> = ({
                         }
                     }
                 } else {
+                    isWordComplete = true;
                     for (let row = activeWord.row; row < activeWord.row + activeWord.answer.length; row++) {
                         if (newGrid[row][activeWord.col].value === '') {
                             isWordComplete = false;
@@ -163,11 +170,16 @@ export const Grid: React.FC<GridProps> = ({
                         }
                     }
                 }
+            }
 
-                // If the word is complete, hide keyboard on mobile
-                if (isWordComplete && inputRef.current) {
+            // On mobile, if word is complete, hide keyboard and don't move cursor
+            // Otherwise, move cursor normally
+            if (isWordComplete && window.innerWidth < 768) {
+                if (inputRef.current) {
                     inputRef.current.blur();
                 }
+            } else {
+                onMoveCursor(r, c, direction, true);
             }
         }
 
