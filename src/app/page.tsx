@@ -17,6 +17,9 @@ export default function Home() {
   const [puzzleId] = useState<string>('1');
   const startTimeRef = useRef<number>(Date.now());
 
+  // Helper function to get localStorage key for current puzzle
+  const getStorageKey = useCallback((id: string) => `crossword_progress_${id}`, []);
+
   // Helper function to calculate completion percentage
   const calculateCompletion = useCallback((gridData: GridData) => {
     if (gridData.length === 0) return 0;
@@ -35,12 +38,53 @@ export default function Home() {
     return totalCells > 0 ? Math.round((filledCells / totalCells) * 100) : 0;
   }, []);
 
+  // Save grid to localStorage whenever it changes
+  useEffect(() => {
+    if (grid.length > 0 && typeof window !== 'undefined') {
+      try {
+        // Extract only the user's values to save
+        const savedState = grid.map(row =>
+          row.map(cell => cell.value)
+        );
+        localStorage.setItem(getStorageKey(puzzleId), JSON.stringify(savedState));
+      } catch (error) {
+        console.error('Failed to save progress to localStorage:', error);
+      }
+    }
+  }, [grid, puzzleId, getStorageKey]);
+
   useEffect(() => {
     // Load puzzle #1 from its folder
     fetch('/data/1/puzzle.json')
       .then(res => res.json())
       .then((puzzle: PuzzleData) => {
-        setGrid(initializeGrid(puzzle));
+        const initialGrid = initializeGrid(puzzle);
+
+        // Try to restore saved progress from localStorage
+        if (typeof window !== 'undefined') {
+          try {
+            const savedState = localStorage.getItem(getStorageKey(puzzleId));
+            if (savedState) {
+              const savedValues = JSON.parse(savedState);
+              // Restore user's values into the initialized grid
+              const restoredGrid = initialGrid.map((row, r) =>
+                row.map((cell, c) => ({
+                  ...cell,
+                  value: savedValues[r]?.[c] || ''
+                }))
+              );
+              setGrid(restoredGrid);
+            } else {
+              setGrid(initialGrid);
+            }
+          } catch (error) {
+            console.error('Failed to load progress from localStorage:', error);
+            setGrid(initialGrid);
+          }
+        } else {
+          setGrid(initialGrid);
+        }
+
         setClues(puzzle.clues);
 
         // Set initial active cell and word
@@ -55,7 +99,7 @@ export default function Home() {
           (window as any).gtag('event', 'puzzle_started', { puzzleId });
         }
       });
-  }, [puzzleId]);
+  }, [puzzleId, getStorageKey]);
 
   // Track progress when user leaves
   useEffect(() => {
@@ -185,6 +229,27 @@ export default function Home() {
     }
   };
 
+  const clearGrid = () => {
+    // Clear all cell values
+    const clearedGrid = grid.map(row =>
+      row.map(cell => ({
+        ...cell,
+        value: '',
+        isError: false
+      }))
+    );
+    setGrid(clearedGrid);
+
+    // Clear localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(getStorageKey(puzzleId));
+      } catch (error) {
+        console.error('Failed to clear localStorage:', error);
+      }
+    }
+  };
+
   return (
     <main className="container">
       <h1 className="title">Cruzadas</h1>
@@ -200,27 +265,50 @@ export default function Home() {
             onMoveCursor={moveCursor}
             onDirectionChange={setDirection}
           />
-          <button
-            onClick={checkGrid}
-            className="verify-button"
-            style={{
-              padding: '0.8rem 2rem',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              backgroundColor: '#3CCF8E',
-              color: '#332B2E',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-              transition: 'transform 0.1s ease'
-            }}
-            onMouseDown={e => e.currentTarget.style.transform = 'scale(0.95)'}
-            onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
-            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-          >
-            Verificar
-          </button>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <button
+              onClick={clearGrid}
+              className="clear-button"
+              style={{
+                padding: '0.8rem 2rem',
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                backgroundColor: '#FF6B6B',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                transition: 'transform 0.1s ease'
+              }}
+              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.95)'}
+              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              Limpar
+            </button>
+            <button
+              onClick={checkGrid}
+              className="verify-button"
+              style={{
+                padding: '0.8rem 2rem',
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                backgroundColor: '#3CCF8E',
+                color: '#332B2E',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                transition: 'transform 0.1s ease'
+              }}
+              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.95)'}
+              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              Verificar
+            </button>
+          </div>
         </div>
         <ClueList
           clues={clues}
