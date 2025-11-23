@@ -120,12 +120,19 @@ a {
     --grid-gap: 3px;
   }
 
+  .clear-button {
+    padding: 0.2rem !important;
+    font-size: 1.1rem !important;
+    min-width: 2.2rem !important;
+    min-height: 2.2rem !important;
+  }
+
   .verify-button {
     width: 100%;
     max-width: 300px;
-    padding: 1rem 2rem !important;
-    font-size: 1.1rem !important;
-    min-height: 48px;
+    padding: 0.5rem 1.2rem !important;
+    font-size: 0.9rem !important;
+    min-height: 40px;
   }
 }
 

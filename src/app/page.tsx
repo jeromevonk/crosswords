@@ -247,6 +247,11 @@ export default function Home() {
   };
 
   const clearGrid = () => {
+    // Ask for confirmation before clearing
+    if (!window.confirm('Tem certeza que deseja limpar todo o progresso?')) {
+      return;
+    }
+
     // Clear all cell values
     const clearedGrid = grid.map(row =>
       row.map(cell => ({
@@ -265,18 +270,6 @@ export default function Home() {
         console.error('Failed to clear localStorage:', error);
       }
     }
-  };
-
-  const fillWithAnswers = () => {
-    // Fill all cells with correct answers except row 12, col 12 (1-indexed, so r=11, c=11 in 0-indexed)
-    const filledGrid = grid.map((row, r) =>
-      row.map((cell, c) => ({
-        ...cell,
-        value: (r === 11 && c === 11) ? '' : cell.answer,
-        isError: false
-      }))
-    );
-    setGrid(filledGrid);
   };
 
   return (
@@ -338,27 +331,40 @@ export default function Home() {
             onMoveCursor={moveCursor}
             onDirectionChange={setDirection}
           />
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', width: '100%', maxWidth: '600px' }}>
+            {/* Small trash icon button */}
             <button
               onClick={clearGrid}
               className="clear-button"
+              title="Limpar progresso"
               style={{
-                padding: '0.8rem 2rem',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                backgroundColor: '#FF6B6B',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '4px',
+                padding: '0.6rem',
+                fontSize: '1.5rem',
+                backgroundColor: 'transparent',
+                color: '#888',
+                border: '1px solid #888',
+                borderRadius: '6px',
                 cursor: 'pointer',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                transition: 'transform 0.1s ease'
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minWidth: '3rem',
+                minHeight: '3rem',
+                flexShrink: 0
               }}
-              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.95)'}
-              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+              onMouseEnter={e => {
+                e.currentTarget.style.color = '#FF6B6B';
+                e.currentTarget.style.borderColor = '#FF6B6B';
+                e.currentTarget.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.color = '#888';
+                e.currentTarget.style.borderColor = '#888';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
             >
-              Limpar
+              🗑️
             </button>
             <button
               onClick={checkGrid}
@@ -373,7 +379,9 @@ export default function Home() {
                 borderRadius: '4px',
                 cursor: 'pointer',
                 boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                transition: 'transform 0.1s ease'
+                transition: 'transform 0.1s ease',
+                flexGrow: 1,
+                maxWidth: '200px'
               }}
               onMouseDown={e => e.currentTarget.style.transform = 'scale(0.95)'}
               onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
@@ -381,27 +389,8 @@ export default function Home() {
             >
               Verificar
             </button>
-            <button
-              onClick={fillWithAnswers}
-              className="help-button"
-              style={{
-                padding: '0.8rem 2rem',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                backgroundColor: '#4A9EFF',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                transition: 'transform 0.1s ease'
-              }}
-              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.95)'}
-              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-            >
-              Ajuda
-            </button>
+            {/* Spacer to balance the layout */}
+            <div style={{ minWidth: '3rem', flexShrink: 0 }}></div>
           </div>
         </div>
         <ClueList
