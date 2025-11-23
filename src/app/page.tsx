@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import Confetti from 'react-confetti';
 import { Grid } from "@/components/Grid";
 import { ClueList } from "@/components/ClueList";
 import { GridData, Direction, ClueGroup, Word, PuzzleData } from '@/lib/types';
@@ -12,10 +13,22 @@ export default function Home() {
   const [direction, setDirection] = useState<Direction>('across');
   const [clues, setClues] = useState<{ across: ClueGroup[]; down: ClueGroup[] }>({ across: [], down: [] });
   const [activeWord, setActiveWord] = useState<{ row: number; col: number; direction: Direction } | null>(null);
+  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
   // Analytics tracking
   const [puzzleId] = useState<string>('1');
   const startTimeRef = useRef<number>(Date.now());
+
+  // Track window size for confetti
+  useEffect(() => {
+    const updateWindowSize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    updateWindowSize();
+    window.addEventListener('resize', updateWindowSize);
+    return () => window.removeEventListener('resize', updateWindowSize);
+  }, []);
 
   // Helper function to get localStorage key for current puzzle
   const getStorageKey = useCallback((id: string) => `crossword_progress_${id}`, []);
@@ -217,11 +230,15 @@ export default function Home() {
     setGrid(newGrid);
 
     // Check if puzzle is completed (all cells correct)
-    const isCompleted = newGrid.every(row =>
+    const puzzleComplete = newGrid.every(row =>
       row.every(cell => cell.isBlack || cell.value === cell.answer)
     );
 
-    if (isCompleted) {
+    if (puzzleComplete) {
+      setIsCompleted(true);
+      // Stop confetti after 5 seconds
+      setTimeout(() => setIsCompleted(false), 5000);
+
       const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', 'puzzle_completed', { puzzleId, timeSpent });
@@ -250,8 +267,64 @@ export default function Home() {
     }
   };
 
+  const fillWithAnswers = () => {
+    // Fill all cells with correct answers except row 12, col 12 (1-indexed, so r=11, c=11 in 0-indexed)
+    const filledGrid = grid.map((row, r) =>
+      row.map((cell, c) => ({
+        ...cell,
+        value: (r === 11 && c === 11) ? '' : cell.answer,
+        isError: false
+      }))
+    );
+    setGrid(filledGrid);
+  };
+
   return (
     <main className="container">
+      {isCompleted && (
+        <>
+          <Confetti
+            width={windowSize.width}
+            height={windowSize.height}
+            recycle={false}
+            numberOfPieces={500}
+          />
+          <div
+            style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              backgroundColor: 'rgba(51, 43, 46, 0.95)',
+              color: '#3CCF8E',
+              padding: '2rem 3rem',
+              borderRadius: '12px',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              zIndex: 1000,
+              textAlign: 'center',
+              animation: 'fadeIn 0.5s ease-in',
+              border: '2px solid #3CCF8E'
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+              🎉 Parabéns!
+            </h2>
+
+          </div>
+          <style jsx>{`
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+              }
+              to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+              }
+            }
+          `}</style>
+        </>
+      )}
       <h1 className="title">Cruzadas</h1>
       <div className="game-layout">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
@@ -307,6 +380,27 @@ export default function Home() {
               onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
             >
               Verificar
+            </button>
+            <button
+              onClick={fillWithAnswers}
+              className="help-button"
+              style={{
+                padding: '0.8rem 2rem',
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                backgroundColor: '#4A9EFF',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                transition: 'transform 0.1s ease'
+              }}
+              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.95)'}
+              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              Ajuda
             </button>
           </div>
         </div>
