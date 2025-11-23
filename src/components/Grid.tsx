@@ -8,7 +8,7 @@ interface GridProps {
     grid: GridData;
     activeCell: { r: number; c: number } | null;
     direction: Direction;
-    activeWord?: { row: number; col: number; direction: Direction } | null;
+    activeWord?: { row: number; col: number; direction: Direction; answer: string } | null;
     onCellClick: (r: number, c: number) => void;
     onGridChange: (newGrid: GridData) => void;
     onMoveCursor: (r: number, c: number, dir: Direction, forward: boolean) => void;
@@ -83,6 +83,29 @@ export const Grid: React.FC<GridProps> = ({
             newGrid[r][c].value = key.toUpperCase();
             onGridChange(newGrid);
             onMoveCursor(r, c, direction, true);
+
+            // Check if we reached the end of the word
+            if (activeWord) {
+                let isLastCell = false;
+                if (activeWord.direction === 'across') {
+                    const wordEndCol = activeWord.col + activeWord.answer.length - 1;
+                    if (r === activeWord.row && c === wordEndCol) {
+                        isLastCell = true;
+                    }
+                } else {
+                    const wordEndRow = activeWord.row + activeWord.answer.length - 1;
+                    if (c === activeWord.col && r === wordEndRow) {
+                        isLastCell = true;
+                    }
+                }
+
+                // If it's the last cell, hide keyboard on mobile
+                if (isLastCell && window.innerWidth < 768) {
+                    if (inputRef.current) {
+                        inputRef.current.blur();
+                    }
+                }
+            }
         }
     }, [activeCell, direction, grid, onDirectionChange, onGridChange, onMoveCursor]);
 
@@ -119,6 +142,29 @@ export const Grid: React.FC<GridProps> = ({
             newGrid[r][c].value = value.toUpperCase();
             onGridChange(newGrid);
             onMoveCursor(r, c, direction, true);
+
+            // Check if we reached the end of the word
+            if (activeWord) {
+                let isLastCell = false;
+                if (activeWord.direction === 'across') {
+                    const wordEndCol = activeWord.col + activeWord.answer.length - 1;
+                    if (r === activeWord.row && c === wordEndCol) {
+                        isLastCell = true;
+                    }
+                } else {
+                    const wordEndRow = activeWord.row + activeWord.answer.length - 1;
+                    if (c === activeWord.col && r === wordEndRow) {
+                        isLastCell = true;
+                    }
+                }
+
+                // If it's the last cell, hide keyboard on mobile
+                if (isLastCell && window.innerWidth < 768) {
+                    if (inputRef.current) {
+                        inputRef.current.blur();
+                    }
+                }
+            }
         }
 
         // Always clear the input

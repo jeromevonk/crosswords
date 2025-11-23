@@ -12,7 +12,7 @@ export default function Home() {
   const [activeCell, setActiveCell] = useState<{ r: number; c: number } | null>(null);
   const [direction, setDirection] = useState<Direction>('across');
   const [clues, setClues] = useState<{ across: ClueGroup[]; down: ClueGroup[] }>({ across: [], down: [] });
-  const [activeWord, setActiveWord] = useState<{ row: number; col: number; direction: Direction } | null>(null);
+  const [activeWord, setActiveWord] = useState<{ row: number; col: number; direction: Direction; answer: string } | null>(null);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
@@ -104,7 +104,7 @@ export default function Home() {
         const firstWord = puzzle.clues.across[0]?.words[0];
         if (firstWord) {
           setActiveCell({ r: firstWord.row, c: firstWord.col });
-          setActiveWord({ row: firstWord.row, col: firstWord.col, direction: 'across' });
+          setActiveWord({ row: firstWord.row, col: firstWord.col, direction: 'across', answer: firstWord.answer });
         }
 
         // Track puzzle start with GA4
@@ -140,10 +140,10 @@ export default function Home() {
         for (const word of group.words) {
           // Check if this cell is within this word's range
           if (newDir === 'across' && word.row === r && c >= word.col && c < word.col + word.answer.length) {
-            setActiveWord({ row: word.row, col: word.col, direction: newDir });
+            setActiveWord({ row: word.row, col: word.col, direction: newDir, answer: word.answer });
             return;
           } else if (newDir === 'down' && word.col === c && r >= word.row && r < word.row + word.answer.length) {
-            setActiveWord({ row: word.row, col: word.col, direction: newDir });
+            setActiveWord({ row: word.row, col: word.col, direction: newDir, answer: word.answer });
             return;
           }
         }
@@ -157,10 +157,10 @@ export default function Home() {
         for (const word of group.words) {
           // Check if cell is within this word's range
           if (direction === 'across' && word.row === r && c >= word.col && c < word.col + word.answer.length) {
-            setActiveWord({ row: word.row, col: word.col, direction });
+            setActiveWord({ row: word.row, col: word.col, direction, answer: word.answer });
             return;
           } else if (direction === 'down' && word.col === c && r >= word.row && r < word.row + word.answer.length) {
-            setActiveWord({ row: word.row, col: word.col, direction });
+            setActiveWord({ row: word.row, col: word.col, direction, answer: word.answer });
             return;
           }
         }
@@ -171,7 +171,7 @@ export default function Home() {
   const handleClueClick = (clueNumber: number, direction: Direction, word: Word) => {
     setActiveCell({ r: word.row, c: word.col });
     setDirection(direction);
-    setActiveWord({ row: word.row, col: word.col, direction });
+    setActiveWord({ row: word.row, col: word.col, direction, answer: word.answer });
   };
 
   const moveCursor = useCallback((r: number, c: number, dir: Direction, forward: boolean) => {
@@ -206,10 +206,10 @@ export default function Home() {
           for (const word of group.words) {
             // Check if cell is within this word's range
             if (dir === 'across' && word.row === currR && currC >= word.col && currC < word.col + word.answer.length) {
-              setActiveWord({ row: word.row, col: word.col, direction: dir });
+              setActiveWord({ row: word.row, col: word.col, direction: dir, answer: word.answer });
               return;
             } else if (dir === 'down' && word.col === currC && currR >= word.row && currR < word.row + word.answer.length) {
-              setActiveWord({ row: word.row, col: word.col, direction: dir });
+              setActiveWord({ row: word.row, col: word.col, direction: dir, answer: word.answer });
               return;
             }
           }
