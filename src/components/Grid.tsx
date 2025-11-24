@@ -47,8 +47,14 @@ export const Grid: React.FC<GridProps> = ({
         const input = inputRef.current;
         if (!input) return;
 
-        const handleFocus = () => setIsKeyboardVisible(true);
-        const handleBlur = () => setIsKeyboardVisible(false);
+        const handleFocus = () => {
+            console.log('🎹 Keyboard visible, isMobile:', isMobile, 'activeClue:', activeClue);
+            setIsKeyboardVisible(true);
+        };
+        const handleBlur = () => {
+            console.log('🎹 Keyboard hidden');
+            setIsKeyboardVisible(false);
+        };
 
         input.addEventListener('focus', handleFocus);
         input.addEventListener('blur', handleBlur);
@@ -57,7 +63,7 @@ export const Grid: React.FC<GridProps> = ({
             input.removeEventListener('focus', handleFocus);
             input.removeEventListener('blur', handleBlur);
         };
-    }, []);
+    }, [isMobile, activeClue]);
 
     // Focus input when cell is clicked (triggers mobile keyboard)
     useEffect(() => {
