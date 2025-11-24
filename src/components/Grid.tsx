@@ -30,6 +30,17 @@ export const Grid: React.FC<GridProps> = ({
     const inputRef = useRef<HTMLInputElement>(null);
     const lastProcessedTime = useRef<number>(0);
     const [isKeyboardVisible, setIsKeyboardVisible] = React.useState(false);
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    // Detect if we're on mobile
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // Track keyboard visibility based on input focus
     useEffect(() => {
@@ -105,7 +116,7 @@ export const Grid: React.FC<GridProps> = ({
 
             // Check if the word is now complete (all cells filled)
             let isWordComplete = false;
-            if (activeWord && window.innerWidth < 768) {
+            if (activeWord && isMobile) {
                 if (activeWord.direction === 'across') {
                     isWordComplete = true;
                     for (let col = activeWord.col; col < activeWord.col + activeWord.answer.length; col++) {
@@ -127,7 +138,7 @@ export const Grid: React.FC<GridProps> = ({
 
             // On mobile, if word is complete, hide keyboard and don't move cursor
             // Otherwise, move cursor normally
-            if (isWordComplete && window.innerWidth < 768) {
+            if (isWordComplete && isMobile) {
                 if (inputRef.current) {
                     inputRef.current.blur();
                 }
@@ -172,7 +183,7 @@ export const Grid: React.FC<GridProps> = ({
 
             // Check if the word is now complete (all cells filled)
             let isWordComplete = false;
-            if (activeWord && window.innerWidth < 768) {
+            if (activeWord && isMobile) {
                 if (activeWord.direction === 'across') {
                     isWordComplete = true;
                     for (let col = activeWord.col; col < activeWord.col + activeWord.answer.length; col++) {
@@ -194,7 +205,7 @@ export const Grid: React.FC<GridProps> = ({
 
             // On mobile, if word is complete, hide keyboard and don't move cursor
             // Otherwise, move cursor normally
-            if (isWordComplete && window.innerWidth < 768) {
+            if (isWordComplete && isMobile) {
                 if (inputRef.current) {
                     inputRef.current.blur();
                 }
@@ -261,7 +272,7 @@ export const Grid: React.FC<GridProps> = ({
             />
 
             {/* Floating clue banner for mobile when keyboard is visible */}
-            {isKeyboardVisible && activeClue && window.innerWidth < 768 && (
+            {isKeyboardVisible && activeClue && isMobile && (
                 <div style={{
                     position: 'fixed',
                     top: 0,
@@ -369,7 +380,7 @@ export const Grid: React.FC<GridProps> = ({
                                                 onCellClick(rIndex, cIndex);
                                                 // On mobile, always focus input when clicking a cell
                                                 // This ensures keyboard shows up even when clicking the same cell
-                                                if (window.innerWidth < 768 && inputRef.current) {
+                                                if (isMobile && inputRef.current) {
                                                     inputRef.current.focus();
                                                 }
                                             }
