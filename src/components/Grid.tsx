@@ -310,6 +310,22 @@ export const Grid: React.FC<GridProps> = ({
                 </div>
             )}
 
+            {/* DEBUG: Show state for troubleshooting */}
+            <div style={{
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                backgroundColor: 'rgba(255, 0, 0, 0.8)',
+                color: 'white',
+                padding: '0.5rem',
+                fontSize: '0.7rem',
+                zIndex: 2000,
+                fontFamily: 'monospace'
+            }}>
+                🐛 DEBUG: keyboard={isKeyboardVisible ? '✅' : '❌'} | mobile={isMobile ? '✅' : '❌'} | clue={activeClue ? '✅' : '❌'} | width={typeof window !== 'undefined' ? window.innerWidth : 'N/A'}
+            </div>
+
             <style jsx>{`
                 @keyframes slideDown {
                     from {
