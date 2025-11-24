@@ -183,8 +183,6 @@ export default function Home() {
   };
 
   const handleNextClue = useCallback(() => {
-    console.log('🔍 Next button clicked, searching for incomplete word...');
-
     // Collect all words in order with their metadata
     const allWords: Array<{ group: ClueGroup, word: Word, dir: Direction }> = [];
     clues.across.forEach(group => {
@@ -234,7 +232,6 @@ export default function Home() {
 
       // If found an incomplete word, select it
       if (isIncomplete) {
-        console.log('✅ Found incomplete word:', word.text, `(${dir} ${group.number})`);
         setActiveCell({ r: word.row, c: word.col });
         setDirection(dir);
         setActiveWord({ row: word.row, col: word.col, direction: dir, answer: word.answer });
@@ -242,7 +239,6 @@ export default function Home() {
         return;
       }
     }
-    console.log('❌ No incomplete words found');
   }, [grid, clues, activeWord]);
 
 
