@@ -9,6 +9,7 @@ interface GridProps {
     activeCell: { r: number; c: number } | null;
     direction: Direction;
     activeWord?: { row: number; col: number; direction: Direction; answer: string } | null;
+    activeClue?: { number: number; direction: Direction; text: string } | null;
     onCellClick: (r: number, c: number) => void;
     onGridChange: (newGrid: GridData) => void;
     onMoveCursor: (r: number, c: number, dir: Direction, forward: boolean) => void;
@@ -20,6 +21,7 @@ export const Grid: React.FC<GridProps> = ({
     activeCell,
     direction,
     activeWord,
+    activeClue,
     onCellClick,
     onGridChange,
     onMoveCursor,
@@ -27,6 +29,24 @@ export const Grid: React.FC<GridProps> = ({
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const lastProcessedTime = useRef<number>(0);
+    const [isKeyboardVisible, setIsKeyboardVisible] = React.useState(false);
+
+    // Track keyboard visibility based on input focus
+    useEffect(() => {
+        const input = inputRef.current;
+        if (!input) return;
+
+        const handleFocus = () => setIsKeyboardVisible(true);
+        const handleBlur = () => setIsKeyboardVisible(false);
+
+        input.addEventListener('focus', handleFocus);
+        input.addEventListener('blur', handleBlur);
+
+        return () => {
+            input.removeEventListener('focus', handleFocus);
+            input.removeEventListener('blur', handleBlur);
+        };
+    }, []);
 
     // Focus input when cell is clicked (triggers mobile keyboard)
     useEffect(() => {
@@ -239,6 +259,52 @@ export const Grid: React.FC<GridProps> = ({
                 }}
                 aria-hidden="true"
             />
+
+            {/* Floating clue banner for mobile when keyboard is visible */}
+            {isKeyboardVisible && activeClue && window.innerWidth < 768 && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    backgroundColor: 'rgba(51, 43, 46, 0.95)',
+                    color: '#E8E6E3',
+                    padding: '0.75rem 1rem',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                    zIndex: 1000,
+                    borderBottom: '2px solid #3CCF8E',
+                    animation: 'slideDown 0.2s ease-out',
+                }}>
+                    <div style={{
+                        fontSize: '0.75rem',
+                        fontWeight: 'bold',
+                        color: '#3CCF8E',
+                        marginBottom: '0.25rem',
+                        textTransform: 'capitalize'
+                    }}>
+                        {activeClue.number} {activeClue.direction === 'across' ? 'Horizontal' : 'Vertical'}
+                    </div>
+                    <div style={{
+                        fontSize: '0.9rem',
+                        lineHeight: '1.3'
+                    }}>
+                        {activeClue.text}
+                    </div>
+                </div>
+            )}
+
+            <style jsx>{`
+                @keyframes slideDown {
+                    from {
+                        transform: translateY(-100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+            `}</style>
 
             {/* Column headers */}
             <div className={styles.columnHeaders}>

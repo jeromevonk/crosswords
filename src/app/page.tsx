@@ -13,6 +13,7 @@ export default function Home() {
   const [direction, setDirection] = useState<Direction>('across');
   const [clues, setClues] = useState<{ across: ClueGroup[]; down: ClueGroup[] }>({ across: [], down: [] });
   const [activeWord, setActiveWord] = useState<{ row: number; col: number; direction: Direction; answer: string } | null>(null);
+  const [activeClue, setActiveClue] = useState<{ number: number; direction: Direction; text: string } | null>(null);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
@@ -102,9 +103,11 @@ export default function Home() {
 
         // Set initial active cell and word
         const firstWord = puzzle.clues.across[0]?.words[0];
-        if (firstWord) {
+        const firstClueNumber = puzzle.clues.across[0]?.number;
+        if (firstWord && firstClueNumber !== undefined) {
           setActiveCell({ r: firstWord.row, c: firstWord.col });
           setActiveWord({ row: firstWord.row, col: firstWord.col, direction: 'across', answer: firstWord.answer });
+          setActiveClue({ number: firstClueNumber, direction: 'across', text: firstWord.text });
         }
 
         // Track puzzle start with GA4
@@ -141,9 +144,11 @@ export default function Home() {
           // Check if this cell is within this word's range
           if (newDir === 'across' && word.row === r && c >= word.col && c < word.col + word.answer.length) {
             setActiveWord({ row: word.row, col: word.col, direction: newDir, answer: word.answer });
+            setActiveClue({ number: group.number, direction: newDir, text: word.text });
             return;
           } else if (newDir === 'down' && word.col === c && r >= word.row && r < word.row + word.answer.length) {
             setActiveWord({ row: word.row, col: word.col, direction: newDir, answer: word.answer });
+            setActiveClue({ number: group.number, direction: newDir, text: word.text });
             return;
           }
         }
@@ -158,9 +163,11 @@ export default function Home() {
           // Check if cell is within this word's range
           if (direction === 'across' && word.row === r && c >= word.col && c < word.col + word.answer.length) {
             setActiveWord({ row: word.row, col: word.col, direction, answer: word.answer });
+            setActiveClue({ number: group.number, direction, text: word.text });
             return;
           } else if (direction === 'down' && word.col === c && r >= word.row && r < word.row + word.answer.length) {
             setActiveWord({ row: word.row, col: word.col, direction, answer: word.answer });
+            setActiveClue({ number: group.number, direction, text: word.text });
             return;
           }
         }
@@ -172,6 +179,7 @@ export default function Home() {
     setActiveCell({ r: word.row, c: word.col });
     setDirection(direction);
     setActiveWord({ row: word.row, col: word.col, direction, answer: word.answer });
+    setActiveClue({ number: clueNumber, direction, text: word.text });
   };
 
   const moveCursor = useCallback((r: number, c: number, dir: Direction, forward: boolean) => {
@@ -207,9 +215,11 @@ export default function Home() {
             // Check if cell is within this word's range
             if (dir === 'across' && word.row === currR && currC >= word.col && currC < word.col + word.answer.length) {
               setActiveWord({ row: word.row, col: word.col, direction: dir, answer: word.answer });
+              setActiveClue({ number: group.number, direction: dir, text: word.text });
               return;
             } else if (dir === 'down' && word.col === currC && currR >= word.row && currR < word.row + word.answer.length) {
               setActiveWord({ row: word.row, col: word.col, direction: dir, answer: word.answer });
+              setActiveClue({ number: group.number, direction: dir, text: word.text });
               return;
             }
           }
@@ -326,6 +336,7 @@ export default function Home() {
             activeCell={activeCell}
             direction={direction}
             activeWord={activeWord}
+            activeClue={activeClue}
             onCellClick={handleCellClick}
             onGridChange={setGrid}
             onMoveCursor={moveCursor}
