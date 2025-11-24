@@ -51,7 +51,9 @@ export const ClueList: React.FC<ClueListProps> = ({ clues, activeWord, onClueCli
                                 className={`${styles.clueItem} ${isActive ? styles.clueItemActive : ''}`}
                                 onClick={() => onClueClick(clueGroup.number, direction, word)}
                             >
-                                <span className={styles.clueText}>{word.text}</span>
+                                <span className={styles.clueText}>
+                                    {word.text} ({word.answer.length} {word.answer.length === 1 ? 'letra' : 'letras'})
+                                </span>
                             </div>
                         );
                     })}
