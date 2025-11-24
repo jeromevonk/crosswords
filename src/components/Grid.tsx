@@ -299,7 +299,7 @@ export const Grid: React.FC<GridProps> = ({
                         fontSize: '0.9rem',
                         lineHeight: '1.3'
                     }}>
-                        {activeClue.text} ({activeWord?.answer.length} {activeWord?.answer.length === 1 ? 'letra' : 'letras'})
+                        {activeClue.text} <span style={{ fontSize: '0.75rem', fontWeight: 300, opacity: 0.7 }}>({activeWord?.answer.length} {activeWord?.answer.length === 1 ? 'letra' : 'letras'})</span>
                     </div>
                 </div>
             )}

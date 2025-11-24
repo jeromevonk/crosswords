@@ -52,7 +52,7 @@ export const ClueList: React.FC<ClueListProps> = ({ clues, activeWord, onClueCli
                                 onClick={() => onClueClick(clueGroup.number, direction, word)}
                             >
                                 <span className={styles.clueText}>
-                                    {word.text} ({word.answer.length} {word.answer.length === 1 ? 'letra' : 'letras'})
+                                    {word.text} <span style={{ fontSize: '0.85em', fontWeight: 300, opacity: 0.8 }}>({word.answer.length} {word.answer.length === 1 ? 'letra' : 'letras'})</span>
                                 </span>
                             </div>
                         );
