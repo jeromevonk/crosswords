@@ -14,6 +14,7 @@ interface GridProps {
     onGridChange: (newGrid: GridData) => void;
     onMoveCursor: (r: number, c: number, dir: Direction, forward: boolean) => void;
     onDirectionChange: (dir: Direction) => void;
+    onNextClue?: () => void;
 }
 
 export const Grid: React.FC<GridProps> = ({
@@ -25,7 +26,8 @@ export const Grid: React.FC<GridProps> = ({
     onCellClick,
     onGridChange,
     onMoveCursor,
-    onDirectionChange
+    onDirectionChange,
+    onNextClue
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const lastProcessedTime = useRef<number>(0);
@@ -307,13 +309,50 @@ export const Grid: React.FC<GridProps> = ({
                     animation: 'slideDown 0.2s ease-out',
                 }}>
                     <div style={{
-                        fontSize: '0.75rem',
-                        fontWeight: 'bold',
-                        color: '#3CCF8E',
-                        marginBottom: '0.25rem',
-                        textTransform: 'capitalize'
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '0.25rem'
                     }}>
-                        {activeClue.number} {activeClue.direction === 'across' ? 'Horizontal' : 'Vertical'}
+                        <div style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 'bold',
+                            color: '#3CCF8E',
+                            textTransform: 'capitalize'
+                        }}>
+                            {activeClue.number} {activeClue.direction === 'across' ? 'Horizontal' : 'Vertical'}
+                        </div>
+                        {onNextClue && (
+                            <button
+                                onTouchEnd={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('🔘 Button touched!');
+                                    onNextClue();
+                                }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('🔘 Button clicked!');
+                                    onNextClue();
+                                }}
+                                onMouseDown={() => console.log('🔘 Button mouse down')}
+                                style={{
+                                    backgroundColor: 'transparent',
+                                    border: '1px solid #3CCF8E',
+                                    color: '#3CCF8E',
+                                    fontSize: '0.7rem',
+                                    padding: '0.25rem 0.5rem',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold',
+                                    pointerEvents: 'auto',
+                                    touchAction: 'manipulation'
+                                }}
+                            >
+                                Next →
+                            </button>
+                        )}
                     </div>
                     <div style={{
                         fontSize: '0.9rem',

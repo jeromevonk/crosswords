@@ -182,6 +182,47 @@ export default function Home() {
     setActiveClue({ number: clueNumber, direction, text: word.text });
   };
 
+  const handleNextClue = useCallback(() => {
+    console.log('🔍 Next button clicked, searching for incomplete word...');
+    // Find the next unsolved word
+    const allCluesOrdered = [...clues.across, ...clues.down];
+
+    for (const group of allCluesOrdered) {
+      const dir = clues.across.includes(group) ? 'across' : 'down';
+      for (const word of group.words) {
+        // Check if this word is incomplete
+        let isIncomplete = false;
+        if (dir === 'across') {
+          for (let col = word.col; col < word.col + word.answer.length; col++) {
+            if (grid[word.row]?.[col]?.value === '') {
+              isIncomplete = true;
+              break;
+            }
+          }
+        } else {
+          for (let row = word.row; row < word.row + word.answer.length; row++) {
+            if (grid[row]?.[word.col]?.value === '') {
+              isIncomplete = true;
+              break;
+            }
+          }
+        }
+
+        // If found an incomplete word, select it
+        if (isIncomplete) {
+          console.log('✅ Found incomplete word:', word.text, `(${dir} ${group.number})`);
+          setActiveCell({ r: word.row, c: word.col });
+          setDirection(dir);
+          setActiveWord({ row: word.row, col: word.col, direction: dir, answer: word.answer });
+          setActiveClue({ number: group.number, direction: dir, text: word.text });
+          return;
+        }
+      }
+    }
+    console.log('❌ No incomplete words found');
+  }, [grid, clues]);
+
+
   const moveCursor = useCallback((r: number, c: number, dir: Direction, forward: boolean) => {
     if (grid.length === 0) return;
 
@@ -341,6 +382,7 @@ export default function Home() {
             onGridChange={setGrid}
             onMoveCursor={moveCursor}
             onDirectionChange={setDirection}
+            onNextClue={handleNextClue}
           />
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', width: '100%', maxWidth: '600px' }}>
             {/* Small trash icon button */}
