@@ -63,12 +63,8 @@ export const Grid: React.FC<GridProps> = ({
     useEffect(() => {
         if (activeCell && inputRef.current) {
             inputRef.current.focus();
-            // Fallback: Also set keyboard visible on mobile when cell becomes active
-            if (isMobile) {
-                setIsKeyboardVisible(true);
-            }
         }
-    }, [activeCell, isMobile]);
+    }, [activeCell]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         if (!activeCell || grid.length === 0) return;
@@ -146,8 +142,6 @@ export const Grid: React.FC<GridProps> = ({
                 if (inputRef.current) {
                     inputRef.current.blur();
                 }
-                // Also hide the banner
-                setIsKeyboardVisible(false);
             } else {
                 onMoveCursor(r, c, direction, true);
             }
@@ -215,8 +209,6 @@ export const Grid: React.FC<GridProps> = ({
                 if (inputRef.current) {
                     inputRef.current.blur();
                 }
-                // Also hide the banner
-                setIsKeyboardVisible(false);
             } else {
                 onMoveCursor(r, c, direction, true);
             }
@@ -311,22 +303,6 @@ export const Grid: React.FC<GridProps> = ({
                     </div>
                 </div>
             )}
-
-            {/* DEBUG: Show state for troubleshooting */}
-            <div style={{
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                backgroundColor: 'rgba(255, 0, 0, 0.8)',
-                color: 'white',
-                padding: '0.5rem',
-                fontSize: '0.7rem',
-                zIndex: 2000,
-                fontFamily: 'monospace'
-            }}>
-                🐛 keyboard={isKeyboardVisible ? '✅' : '❌'} | mobile={isMobile ? '✅' : '❌'} | clue={activeClue ? '✅' : '❌'} | word={activeWord ? '✅' : '❌'}
-            </div>
 
             <style jsx>{`
                 @keyframes slideDown {
