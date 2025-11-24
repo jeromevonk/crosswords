@@ -61,10 +61,16 @@ export const Grid: React.FC<GridProps> = ({
 
     // Focus input when cell is clicked (triggers mobile keyboard)
     useEffect(() => {
-        if (activeCell && inputRef.current) {
+        if (activeCell && inputRef.current && isMobile) {
             inputRef.current.focus();
+            // Check if focus actually happened (for desktop mobile view where events might not fire)
+            setTimeout(() => {
+                if (inputRef.current && document.activeElement === inputRef.current) {
+                    setIsKeyboardVisible(true);
+                }
+            }, 100);
         }
-    }, [activeCell]);
+    }, [activeCell, isMobile]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         if (!activeCell || grid.length === 0) return;
