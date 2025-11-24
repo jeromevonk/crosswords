@@ -295,7 +295,16 @@ export const Grid: React.FC<GridProps> = ({
                       ${!isActive && isHighlighted ? styles.cellHighlight : ''}
                       ${cell.isError ? styles.cellError : ''}
                     `}
-                                        onClick={() => !cell.isBlack && onCellClick(rIndex, cIndex)}
+                                        onClick={() => {
+                                            if (!cell.isBlack) {
+                                                onCellClick(rIndex, cIndex);
+                                                // On mobile, always focus input when clicking a cell
+                                                // This ensures keyboard shows up even when clicking the same cell
+                                                if (window.innerWidth < 768 && inputRef.current) {
+                                                    inputRef.current.focus();
+                                                }
+                                            }
+                                        }}
                                     >
                                         {cell.value}
                                     </div>
