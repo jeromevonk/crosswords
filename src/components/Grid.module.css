@@ -162,6 +162,7 @@
 
     .gridWrapper {
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        margin-top: 3.5rem;
     }
 }
 
