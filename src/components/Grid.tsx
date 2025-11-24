@@ -63,8 +63,12 @@ export const Grid: React.FC<GridProps> = ({
     useEffect(() => {
         if (activeCell && inputRef.current) {
             inputRef.current.focus();
+            // Fallback: Also set keyboard visible on mobile when cell becomes active
+            if (isMobile) {
+                setIsKeyboardVisible(true);
+            }
         }
-    }, [activeCell]);
+    }, [activeCell, isMobile]);
 
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         if (!activeCell || grid.length === 0) return;
