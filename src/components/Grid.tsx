@@ -349,7 +349,7 @@ export const Grid: React.FC<GridProps> = ({
                                     userSelect: 'none'
                                 }}
                             >
-                                Next →
+                                Prox →
                             </button>
                         )}
                     </div>
