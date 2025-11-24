@@ -184,43 +184,66 @@ export default function Home() {
 
   const handleNextClue = useCallback(() => {
     console.log('🔍 Next button clicked, searching for incomplete word...');
-    // Find the next unsolved word
-    const allCluesOrdered = [...clues.across, ...clues.down];
 
-    for (const group of allCluesOrdered) {
-      const dir = clues.across.includes(group) ? 'across' : 'down';
-      for (const word of group.words) {
-        // Check if this word is incomplete
-        let isIncomplete = false;
-        if (dir === 'across') {
-          for (let col = word.col; col < word.col + word.answer.length; col++) {
-            if (grid[word.row]?.[col]?.value === '') {
-              isIncomplete = true;
-              break;
-            }
-          }
-        } else {
-          for (let row = word.row; row < word.row + word.answer.length; row++) {
-            if (grid[row]?.[word.col]?.value === '') {
-              isIncomplete = true;
-              break;
-            }
+    // Collect all words in order with their metadata
+    const allWords: Array<{ group: ClueGroup, word: Word, dir: Direction }> = [];
+    clues.across.forEach(group => {
+      group.words.forEach(word => {
+        allWords.push({ group, word, dir: 'across' });
+      });
+    });
+    clues.down.forEach(group => {
+      group.words.forEach(word => {
+        allWords.push({ group, word, dir: 'down' });
+      });
+    });
+
+    // Find current word index
+    let currentIndex = -1;
+    if (activeWord) {
+      currentIndex = allWords.findIndex(item =>
+        item.word.row === activeWord.row &&
+        item.word.col === activeWord.col &&
+        item.dir === activeWord.direction
+      );
+    }
+
+    // Start searching from next word (wrap around if needed)
+    const startIndex = (currentIndex + 1) % allWords.length;
+    for (let i = 0; i < allWords.length; i++) {
+      const index = (startIndex + i) % allWords.length;
+      const { group, word, dir } = allWords[index];
+
+      // Check if this word is incomplete
+      let isIncomplete = false;
+      if (dir === 'across') {
+        for (let col = word.col; col < word.col + word.answer.length; col++) {
+          if (grid[word.row]?.[col]?.value === '') {
+            isIncomplete = true;
+            break;
           }
         }
-
-        // If found an incomplete word, select it
-        if (isIncomplete) {
-          console.log('✅ Found incomplete word:', word.text, `(${dir} ${group.number})`);
-          setActiveCell({ r: word.row, c: word.col });
-          setDirection(dir);
-          setActiveWord({ row: word.row, col: word.col, direction: dir, answer: word.answer });
-          setActiveClue({ number: group.number, direction: dir, text: word.text });
-          return;
+      } else {
+        for (let row = word.row; row < word.row + word.answer.length; row++) {
+          if (grid[row]?.[word.col]?.value === '') {
+            isIncomplete = true;
+            break;
+          }
         }
+      }
+
+      // If found an incomplete word, select it
+      if (isIncomplete) {
+        console.log('✅ Found incomplete word:', word.text, `(${dir} ${group.number})`);
+        setActiveCell({ r: word.row, c: word.col });
+        setDirection(dir);
+        setActiveWord({ row: word.row, col: word.col, direction: dir, answer: word.answer });
+        setActiveClue({ number: group.number, direction: dir, text: word.text });
+        return;
       }
     }
     console.log('❌ No incomplete words found');
-  }, [grid, clues]);
+  }, [grid, clues, activeWord]);
 
 
   const moveCursor = useCallback((r: number, c: number, dir: Direction, forward: boolean) => {

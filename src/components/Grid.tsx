@@ -327,16 +327,13 @@ export const Grid: React.FC<GridProps> = ({
                                 onTouchEnd={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    console.log('🔘 Button touched!');
                                     onNextClue();
                                 }}
-                                onClick={(e) => {
+                                onMouseDown={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    console.log('🔘 Button clicked!');
                                     onNextClue();
                                 }}
-                                onMouseDown={() => console.log('🔘 Button mouse down')}
                                 style={{
                                     backgroundColor: 'transparent',
                                     border: '1px solid #3CCF8E',
@@ -347,7 +344,8 @@ export const Grid: React.FC<GridProps> = ({
                                     cursor: 'pointer',
                                     fontWeight: 'bold',
                                     pointerEvents: 'auto',
-                                    touchAction: 'manipulation'
+                                    touchAction: 'manipulation',
+                                    userSelect: 'none'
                                 }}
                             >
                                 Next →
