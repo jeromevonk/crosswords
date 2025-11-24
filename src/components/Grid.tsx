@@ -53,25 +53,25 @@ export const Grid: React.FC<GridProps> = ({
         input.addEventListener('focus', handleFocus);
         input.addEventListener('blur', handleBlur);
 
-        // Also detect when viewport resizes (keyboard hide/show on mobile)
-        const handleResize = () => {
-            if (isMobile && document.activeElement !== input) {
-                setIsKeyboardVisible(false);
-            }
-        };
-
-        if (typeof window !== 'undefined' && window.visualViewport) {
-            window.visualViewport.addEventListener('resize', handleResize);
+        // Polling mechanism for mobile: check if input is still focused
+        let focusCheckInterval: NodeJS.Timeout | null = null;
+        if (isMobile) {
+            focusCheckInterval = setInterval(() => {
+                // If we think keyboard is visible but input is not focused, hide it
+                if (isKeyboardVisible && document.activeElement !== input) {
+                    setIsKeyboardVisible(false);
+                }
+            }, 300); // Check every 300ms
         }
 
         return () => {
             input.removeEventListener('focus', handleFocus);
             input.removeEventListener('blur', handleBlur);
-            if (typeof window !== 'undefined' && window.visualViewport) {
-                window.visualViewport.removeEventListener('resize', handleResize);
+            if (focusCheckInterval) {
+                clearInterval(focusCheckInterval);
             }
         };
-    }, [isMobile]);
+    }, [isMobile, isKeyboardVisible]);
 
     // Focus input when cell is clicked (triggers mobile keyboard)
     useEffect(() => {
