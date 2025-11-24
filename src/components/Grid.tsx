@@ -47,14 +47,8 @@ export const Grid: React.FC<GridProps> = ({
         const input = inputRef.current;
         if (!input) return;
 
-        const handleFocus = () => {
-            console.log('🎹 Keyboard visible, isMobile:', isMobile, 'activeClue:', activeClue);
-            setIsKeyboardVisible(true);
-        };
-        const handleBlur = () => {
-            console.log('🎹 Keyboard hidden');
-            setIsKeyboardVisible(false);
-        };
+        const handleFocus = () => setIsKeyboardVisible(true);
+        const handleBlur = () => setIsKeyboardVisible(false);
 
         input.addEventListener('focus', handleFocus);
         input.addEventListener('blur', handleBlur);
@@ -63,7 +57,7 @@ export const Grid: React.FC<GridProps> = ({
             input.removeEventListener('focus', handleFocus);
             input.removeEventListener('blur', handleBlur);
         };
-    }, [isMobile, activeClue]);
+    }, []);
 
     // Focus input when cell is clicked (triggers mobile keyboard)
     useEffect(() => {
@@ -309,22 +303,6 @@ export const Grid: React.FC<GridProps> = ({
                     </div>
                 </div>
             )}
-
-            {/* DEBUG: Show state for troubleshooting */}
-            <div style={{
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                backgroundColor: 'rgba(255, 0, 0, 0.8)',
-                color: 'white',
-                padding: '0.5rem',
-                fontSize: '0.7rem',
-                zIndex: 2000,
-                fontFamily: 'monospace'
-            }}>
-                🐛 DEBUG: keyboard={isKeyboardVisible ? '✅' : '❌'} | mobile={isMobile ? '✅' : '❌'} | clue={activeClue ? '✅' : '❌'} | width={typeof window !== 'undefined' ? window.innerWidth : 'N/A'}
-            </div>
 
             <style jsx>{`
                 @keyframes slideDown {
