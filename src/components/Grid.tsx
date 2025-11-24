@@ -303,7 +303,7 @@ export const Grid: React.FC<GridProps> = ({
                     right: 0,
                     backgroundColor: 'rgba(51, 43, 46, 0.95)',
                     color: '#E8E6E3',
-                    padding: '0.75rem 1rem',
+                    padding: '0.5rem 0.75rem',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
                     zIndex: 1000,
                     borderBottom: '2px solid #3CCF8E',
