@@ -146,6 +146,8 @@ export const Grid: React.FC<GridProps> = ({
                 if (inputRef.current) {
                     inputRef.current.blur();
                 }
+                // Also hide the banner
+                setIsKeyboardVisible(false);
             } else {
                 onMoveCursor(r, c, direction, true);
             }
@@ -213,6 +215,8 @@ export const Grid: React.FC<GridProps> = ({
                 if (inputRef.current) {
                     inputRef.current.blur();
                 }
+                // Also hide the banner
+                setIsKeyboardVisible(false);
             } else {
                 onMoveCursor(r, c, direction, true);
             }
