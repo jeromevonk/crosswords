@@ -350,7 +350,9 @@ export default function Home() {
             width={windowSize.width}
             height={windowSize.height}
             recycle={false}
-            numberOfPieces={500}
+            numberOfPieces={1000}
+            gravity={0.3}
+            initialVelocityY={20}
           />
           <div
             style={{
